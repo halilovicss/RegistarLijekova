@@ -52,11 +52,10 @@ private Database database;
         list = new ArrayList<>();
         viewbinding.rvItemMedicine.setLayoutManager(new LinearLayoutManager(getActivity()));
         database = new Database(getContext());
-
+        //provjeri da li u bazi postoje lijekovi
         if (database.isEmpty("lijekovi")){
             getMedicals();
             saveCategories();
-            Toast.makeText(getContext(), "Prazna baza", Toast.LENGTH_SHORT).show();
         }else  {
 
 
@@ -79,7 +78,7 @@ private Database database;
     adapter.notifyDataSetChanged();
     }
 
-
+// klikom na lijek otvori novi fragment i proslijedi podatke
     @Override
     public void onItemClick(View view, int item) {
 
@@ -99,6 +98,9 @@ private Database database;
         Navigation.findNavController(view).navigate(R.id.action_registarLijekova_to_medicamentDetails,bundle);
 
     }
+
+
+    //ucitaj vrijednosti iz baze i proslijedi u listu
     private void getMedicals(){
         Call<ArrayList<LijekoviModel>> call = Client.getInstance().getApi().getMedicaments();
         call.enqueue(new Callback<ArrayList<LijekoviModel>>() {

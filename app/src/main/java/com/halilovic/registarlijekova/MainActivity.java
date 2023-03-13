@@ -31,8 +31,4 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-    // metoda za ucitavanje liste lijekova u bazu podataka
-
-
 }
