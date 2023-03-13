@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">RegistarLijekova</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="registar_lijekova">Registar lijekova</string>
+    <string name="detalji_lijeka">Detalji lijeka</string>
+    <string name="aktivna_supstanca">Aktivna supstanca</string>
+    <string name="omjer_aktivne_supstance">Omjer aktivne supstance</string>
+    <string name="preporucene_doze">Preporucene dnevne doze</string>
+    <string name="back">Back</string>
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/dashboard"
+        android:title="Dashboard"
+        android:icon="@drawable/dashboard"/>
+    <item
+        android:id="@+id/regitar"
+        android:title="Registar Lijekova"
+        android:icon="@drawable/pill"/>
+
+    <item
+        android:id="@+id/asistent"
+        android:title="Asistent"
+        android:icon="@drawable/heart"/>
+
+
+    <item
+        android:id="@+id/calculator"
+        android:title="Kalkulator"
+        android:icon="@drawable/calculator"/>
+
+    <item
+        android:id="@+id/profil"
+        android:title="Profil"
+        android:icon="@drawable/profile"/>
+
+</menu>
