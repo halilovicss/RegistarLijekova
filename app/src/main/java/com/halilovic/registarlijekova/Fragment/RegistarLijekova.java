@@ -4,40 +4,37 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
-
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import com.halilovic.registarlijekova.Adapter.MedicamentsAdapter;
-import com.halilovic.registarlijekova.Adapter.OnItemClickListener;
 import com.halilovic.registarlijekova.Api.Client;
 import com.halilovic.registarlijekova.Base.Database;
 import com.halilovic.registarlijekova.Model.CategoryModel;
 import com.halilovic.registarlijekova.Model.LijekoviModel;
 import com.halilovic.registarlijekova.Model.Model;
-import com.halilovic.registarlijekova.R;
 import com.halilovic.registarlijekova.databinding.FragmentRegistarLijekovaBinding;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class RegistarLijekova extends Fragment implements OnItemClickListener {
+public class RegistarLijekova extends Fragment{
 private FragmentRegistarLijekovaBinding viewbinding;
 private MedicamentsAdapter adapter;
 private ArrayList<Model> list;
 private Database database;
-
+private List<String> categoryList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -61,7 +58,54 @@ private Database database;
 
         }
         getDataToRV();
+        getCategoryList();
 
+        //pretrazivanje po nazivu lijeka
+        viewbinding.search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                filter(newText);
+                if (newText.length() > 1){
+                    adapter.notifyDataSetChanged();
+                }
+                return false;
+            }
+        });
+        // ukoliko korisnik klikne na x u search widgetu
+        viewbinding.search.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                adapter.notifyDataSetChanged();
+
+                return false;
+            }
+        });
+
+        // klikom na kategoriju filtriraj podatke
+        viewbinding.spinnerCat.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // ako je izabrano prazno polje prikazi sve podatke
+                if (parent.getItemAtPosition(position).toString().equals("")){
+                    filter("");
+                    adapter.notifyDataSetChanged();
+                }
+                filterCategory(parent.getItemAtPosition(position).toString().trim().toLowerCase());
+                adapter.notifyDataSetChanged();
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -70,34 +114,16 @@ private Database database;
         viewbinding = null;
     }
 
-
+// ubaci podatke u adapter i adapter proslijedi u recyclearview
     private void getDataToRV(){
     list = database.readData();
-    adapter = new MedicamentsAdapter(getContext(),list,this::onItemClick);
+    adapter = new MedicamentsAdapter(getContext(),list);
     viewbinding.rvItemMedicine.setAdapter(adapter);
     adapter.notifyDataSetChanged();
     }
 
 // klikom na lijek otvori novi fragment i proslijedi podatke
-    @Override
-    public void onItemClick(View view, int item) {
 
-        Bundle bundle = new Bundle();
-        bundle.putInt("id",list.get(item).getId_lijeka());
-        bundle.putString("name",list.get(item).getName());
-        bundle.putString("atc",list.get(item).getAtc());
-        bundle.putString("category",list.get(item).getName_cat());
-        bundle.putString("shortDescription",list.get(item).getShortDescription());
-        bundle.putString("description",list.get(item).getDescription());
-        bundle.putInt("activeSubstanceValue",list.get(item).getActiveSubstanceValue());
-        bundle.putInt("omjer",list.get(item).getActiveSubstanceSelectedQuantity());
-        bundle.putInt("min",list.get(item).getMinimumDailyDose());
-        bundle.putInt("max",list.get(item).getMaximumDailyDose());
-
-
-        Navigation.findNavController(view).navigate(R.id.action_registarLijekova_to_medicamentDetails,bundle);
-
-    }
 
 
     //ucitaj vrijednosti iz baze i proslijedi u listu
@@ -140,4 +166,50 @@ private Database database;
             }
         });
     }
+    // pretraga lijekova po nazivu
+    private void filter(String text) {
+
+        ArrayList<Model> filteredlist = new ArrayList<>();
+        for (Model item : list) {
+            if (item.getName().toLowerCase().contains(text)) {
+                filteredlist.add(item);
+            }
+        }
+        if (filteredlist.isEmpty()) {
+        } else {
+            adapter.filterList(filteredlist);
+        }
+    }
+    // dobij kategorije u spinner iz baze podataka, prikazi samo kategorije u kojima se nalaze lijekovi
+
+    private void getCategoryList(){
+        categoryList = new ArrayList<>();
+        List<String> newList = new ArrayList<>();
+        newList = database.readCategory();
+        categoryList.add("");
+        categoryList.addAll(newList);
+
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item,categoryList);
+        adapter.setDropDownViewResource(android.R.layout.simple_expandable_list_item_1);
+        viewbinding.spinnerCat.setAdapter(adapter);
+    }
+
+    // metoda za pretrazivanje lijekova prema kategoriji
+    private void filterCategory(String text) {
+
+        ArrayList<Model> filteredlist = new ArrayList<>();
+
+        for (Model item : list) {
+            if (item.getName_cat().toLowerCase().equals(text)) {
+                filteredlist.add(item);
+            }
+        }
+        if (filteredlist.isEmpty()) {
+
+        } else {
+            adapter.filterList(filteredlist);
+        }
+    }
+
 }

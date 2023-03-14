@@ -14,6 +14,7 @@ import com.halilovic.registarlijekova.Model.LijekoviModel;
 import com.halilovic.registarlijekova.Model.Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Database extends SQLiteOpenHelper {
 
@@ -113,6 +114,8 @@ public class Database extends SQLiteOpenHelper {
 
 
     }
+
+
     public void addCategory(ArrayList<CategoryModel> list){
         for (int i = 0;i<list.size();i++){
             int id = list.get(i).getId();
@@ -147,7 +150,7 @@ public class Database extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-
+// provjeri da li je baza prazna ukoliko nema podataka ucitaj sa interneta
     public boolean isEmpty(String TableName){
 
         SQLiteDatabase database = this.getReadableDatabase();
@@ -160,6 +163,7 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
+    //ucitaj podatke u Model class
     public ArrayList<Model> readData(){
         SQLiteDatabase db = this.getWritableDatabase();
         ArrayList<Model> courseModalArrayList;
@@ -185,6 +189,24 @@ public class Database extends SQLiteOpenHelper {
 
 
                         ));
+            }while (cursor.moveToNext());
+            cursor.close();
+        }return courseModalArrayList;
+
+
+    }
+
+    // dobij podatke u listu, ucitaj one kategorije gdje se nalaze lijekovi
+    public List<String> readCategory(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        List<String> courseModalArrayList;
+        Cursor cursor = db.rawQuery("SELECT n.id_lijeka, n.name, l.name_cat FROM lijekovi n JOIN KATEGORIJE l ON n.categoryId = l.id_kategorije GROUP BY l.name_cat",null);
+        courseModalArrayList = new ArrayList<>();
+        if (cursor.moveToFirst()){
+            do {
+                courseModalArrayList.add(cursor.getString(2))
+
+                ;
             }while (cursor.moveToNext());
             cursor.close();
         }return courseModalArrayList;

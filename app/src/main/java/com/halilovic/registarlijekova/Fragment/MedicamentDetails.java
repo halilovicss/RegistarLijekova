@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -113,7 +114,12 @@ private FragmentMedicamentDetailsBinding binding;
                 @Override
                 public void onResponse(Call<ArrayList<SubstanceModel>> call, Response<ArrayList<SubstanceModel>> response) {
                     if (response.isSuccessful())
-                        binding.txtNazivAkSupstance.setText(getString(R.string.aktivna_supstanca) + " " + response.body().get(0).getName());
+                        try {
+                            binding.txtNazivAkSupstance.setText(getString(R.string.aktivna_supstanca) + " " + response.body().get(0).getName());
+
+                        }catch (Exception e){
+                            Log.e("TAG", "onResponse: " + e.getMessage() );
+                        }
                 }
 
                 @Override

@@ -3,9 +3,6 @@ package com.halilovic.registarlijekova.Model;
 public class Model {
     private int id_lijeka;
 
-    public int getId_lijeka() {
-        return id_lijeka;
-    }
 
     private String name;
     private String color;
@@ -19,21 +16,6 @@ public class Model {
     private int minimumDailyDose;
     private int maximumDailyDose;
 
-    public int getActiveSubstanceSelectedQuantity() {
-        return activeSubstanceSelectedQuantity;
-    }
-
-    public int getMinimumDailyDose() {
-        return minimumDailyDose;
-    }
-
-    public int getMaximumDailyDose() {
-        return maximumDailyDose;
-    }
-
-    public int getActiveSubstanceValue() {
-        return activeSubstanceValue;
-    }
 
     public Model(int id_lijeka,String name, String color, String name_cat, String atc, String shortDescription, String description, int activeSubstanceValue, int activeSubstanceSelectedQuantity,int minimumDailyDose, int maximumDailyDose) {
         this.id_lijeka = id_lijeka;
@@ -75,6 +57,24 @@ public class Model {
 
     public String getDescription() {
         return description;
+    }
+    public int getId_lijeka() {
+        return id_lijeka;
+    }
+    public int getActiveSubstanceSelectedQuantity() {
+        return activeSubstanceSelectedQuantity;
+    }
+
+    public int getMinimumDailyDose() {
+        return minimumDailyDose;
+    }
+
+    public int getMaximumDailyDose() {
+        return maximumDailyDose;
+    }
+
+    public int getActiveSubstanceValue() {
+        return activeSubstanceValue;
     }
 
 }

@@ -28,4 +28,9 @@ public class CategoryModel {
         this.name = name;
         this.color = color;
     }
+
+    public CategoryModel(String name) {
+
+        this.name = name;
+    }
 }
