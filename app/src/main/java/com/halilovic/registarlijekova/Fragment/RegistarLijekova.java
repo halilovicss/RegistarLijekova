@@ -91,7 +91,7 @@ private List<String> categoryList;
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // ako je izabrano prazno polje prikazi sve podatke
-                if (parent.getItemAtPosition(position).toString().equals("")){
+                if (parent.getItemAtPosition(position).toString().equals("Izaberi kategoriju")){
                     filter("");
                     adapter.notifyDataSetChanged();
                 }
@@ -186,7 +186,7 @@ private List<String> categoryList;
         categoryList = new ArrayList<>();
         List<String> newList = new ArrayList<>();
         newList = database.readCategory();
-        categoryList.add("");
+        categoryList.add("Izaberi kategoriju");
         categoryList.addAll(newList);
 
 
