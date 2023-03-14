@@ -146,7 +146,7 @@
             android:backgroundTint="#FFC107">
 
             <TextView
-                android:id="@+id/txt_preporucene_doze"
+                android:id="@+id/txt_omjer_supstance"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
@@ -168,7 +168,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4">
 
             <TextView
-                android:id="@+id/txt_omjer_supstance"
+                android:id="@+id/txt_preporucene_doze"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
